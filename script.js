@@ -135,23 +135,22 @@ navLinks.forEach(link => {
         e.preventDefault();
         const targetId = link.getAttribute('data-target');
         
-        // El brillo blanco nace del sol y se expande
         transitionGlow.classList.add('expanding');
 
         setTimeout(() => {
-            // Ocultamos la Home screen
             document.getElementById('home').classList.remove('active-screen');
             document.querySelectorAll('.screen').forEach(s => {
                 s.style.display = 'none';
-                s.classList.remove('animate-fall'); // Limpieza preventiva
+                s.classList.remove('animate-fall'); 
             });
             
-            // Levantamos la pantalla blanca correspondiente
             const nextScreen = document.getElementById('screen-' + targetId);
-            nextScreen.style.display = 'flex';
-            nextScreen.classList.add('animate-fall'); // Inyecta la animación de caída al h1
+            nextScreen.style.display = nextScreen.id === 'screen-referencia' ? 'flex' : 'flex';
             
-            // Retiramos el overlay blanco
+            void nextScreen.offsetHeight;
+            
+            nextScreen.classList.add('animate-fall'); 
+            
             transitionGlow.classList.remove('expanding');
         }, 1200);
     });
@@ -161,16 +160,24 @@ navLinks.forEach(link => {
 document.querySelectorAll('.back-btn').forEach(btn => {
     btn.addEventListener('click', () => {
         transitionGlow.classList.add('expanding');
+        
         setTimeout(() => {
             document.querySelectorAll('.screen').forEach(s => {
                 s.style.display = 'none';
-                s.classList.remove('animate-fall'); // Quita la clase para que pueda repetirse
+                s.classList.remove('animate-fall'); 
             });
+            
             const homeScreen = document.getElementById('home');
             homeScreen.classList.add('active-screen');
             homeScreen.style.display = 'block';
+            
             transitionGlow.classList.remove('expanding');
         }, 1200);
+
+        setTimeout(() => {
+            const refScreen = document.getElementById('screen-referencia');
+            if(refScreen) refScreen.scrollTop = 0;
+        }, 1000); 
     });
 });
 
@@ -181,4 +188,70 @@ const sandboxSecret = document.getElementById('sandboxSecret');
 sunHitArea.addEventListener('click', () => {
     sandboxSecret.classList.toggle('sandbox-revealed');
     intensity = sandboxSecret.classList.contains('sandbox-revealed') ? 2.0 : 1.0;
+});
+
+// --- ANIMACIÓN DE SCROLL EN LA SECCIÓN "LA REFERENCIA" ---
+const observerOptions = {
+    root: document.getElementById('screen-referencia'), 
+    rootMargin: '0px',
+    threshold: 0.15 
+};
+
+const scrollObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+        }
+    });
+}, observerOptions);
+
+document.querySelectorAll('.scroll-anim').forEach(el => {
+    scrollObserver.observe(el);
+});
+
+// --- EFECTO ESTELA CIAN EN EL NOMBRE DEL DESARROLLADOR ---
+const devNameLines = document.querySelectorAll('.dev-name-line');
+
+devNameLines.forEach(line => {
+    const nameText = line.textContent;
+    line.innerHTML = ''; 
+    
+    nameText.split('').forEach((char, index) => {
+        const span = document.createElement('span');
+        if (char === ' ') {
+            span.innerHTML = '&nbsp;';
+        } else {
+            span.textContent = char;
+        }
+        span.setAttribute('data-index', index); 
+        span.style.display = 'inline-block';
+        span.style.transition = 'color 0.15s ease-out, text-shadow 0.15s ease-out';
+        line.appendChild(span);
+    });
+
+    const devLetterSpans = line.querySelectorAll('span');
+
+    devLetterSpans.forEach(span => {
+        span.addEventListener('mouseover', (e) => {
+            const target = e.target;
+            target.classList.remove('name-letter-fading');
+            target.style.transitionDelay = '0s'; 
+            target.classList.add('name-letter-hovered');
+        });
+        
+        span.addEventListener('mouseout', (e) => {
+            const target = e.target;
+            const index = parseInt(target.dataset.index);
+
+            target.classList.remove('name-letter-hovered');
+            target.classList.add('name-letter-fading');
+            
+            target.style.transitionDelay = (index * 0.05) + 's'; 
+
+            setTimeout(() => {
+                target.classList.remove('name-letter-fading');
+                target.style.transitionDelay = '0s';
+            }, (index * 50) + 1500);
+        });
+    });
 });
