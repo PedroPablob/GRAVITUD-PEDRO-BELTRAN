@@ -11,7 +11,7 @@ body.scroll-allowed {
     scroll-behavior: smooth;
 }
 
-/* === MECÁNICA DE TRANSICIÓN: EXPANSIÓN MACIZA DESDE LA FORMA DEL SOL === */
+/* === MECÁNICA DE TRANSICIÓN === */
 .transition-glow {
     position: fixed;
     top: 0; 
@@ -47,7 +47,7 @@ body.scroll-allowed {
     display: block;
 }
 
-/* Nuevas secciones blancas */
+/* Nuevas secciones blancas genéricas */
 .new-section {
     background-color: #fff; 
     display: none;
@@ -64,7 +64,8 @@ body.scroll-allowed {
 }
 
 /* === ANIMACIÓN DE CAÍDA CON REBOTE === */
-.new-section.animate-fall h1 {
+.new-section.animate-fall h1, 
+.new-section.animate-fall .ref-title {
     animation: titleFallFromSky 0.85s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 
@@ -129,7 +130,7 @@ canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index
 
 .hit-area { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 0 0 160px 160px; background-color: transparent; cursor: cell; z-index: 1; }
 
-/* === CONTENEDOR TÍTULO Y SUBTÍTULO === */
+/* === CONTENEDOR TÍTULO PRINCIPAL === */
 .main-title-container { 
     position: absolute; bottom: 30%; left: 50%; transform: translateX(-50%); 
     z-index: 5; width: 100%; 
@@ -165,15 +166,14 @@ canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index
 }
 .subtitle-visible { opacity: 1; visibility: visible; transform: translateY(0); }
 
-/* === SANDBOX OCULTO === */
 .sandbox-container { position: absolute; top: 50px; left: 50px; opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 1s, transform 1s; transform: translateY(-20px) scale(0.9); z-index: 100; }
 .sandbox-revealed { opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0); scale(1); }
 .sandbox-icon { width: 60px; height: auto; filter: drop-shadow(0 0 10px rgba(235, 135, 140, 0.8)); }
 
 /* =========================================================================
-   === ESTILOS ESPECÍFICOS PARA LA REFERENCIA (COLOFÓN) ===
+   === ESTILOS PARA PANTALLAS SCROLLEABLES (REFERENCIA Y CONCEPTO) ===
    ========================================================================= */
-#screen-referencia {
+.scrollable-screen {
     display: none; 
     flex-direction: column;
     justify-content: flex-start; 
@@ -219,6 +219,7 @@ canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index
     color: #9c3d42;
     font-size: 2.5rem;
     letter-spacing: -1px;
+    text-transform: uppercase;
 }
 
 .ref-block p {
@@ -260,7 +261,7 @@ canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index
     height: 320px;
     box-shadow: 0 15px 35px rgba(156, 61, 66, 0.15); 
     transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    text-decoration: none; /* Previene subrayado por ser enlace */
+    text-decoration: none; 
     cursor: pointer;
 }
 
@@ -298,7 +299,7 @@ canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index
     letter-spacing: 1px;
 }
 
-/* === GRILLA DE IMÁGENES DE HERRAMIENTAS CORREGIDA === */
+/* === GRILLA DE IMÁGENES DE HERRAMIENTAS === */
 .tools-image-grid {
     display: flex;
     justify-content: center;
@@ -352,25 +353,364 @@ canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index
     transform: translateY(0); 
 }
 
-/* Ajustes Responsivos Generales */
-@media (max-width: 768px) {
-    .qr-row { flex-direction: column !important; text-align: center; gap: 40px; }
-    .qr-text { align-items: center !important; text-align: center !important; }
-    
-    .tools-image-grid { gap: 30px; }
-    .tool-img-wrapper { width: 60px; height: 60px; }
-    .tool-label { opacity: 1; transform: translateY(0); font-size: 0.9rem;} 
+/* === TARJETAS DE MECÁNICAS DE JUEGO === */
+.mechanics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    width: 100%;
+    max-width: 900px;
+    margin-top: 30px;
 }
 
-/* Conclusión */
-.conclusion-block { margin-top: 40px; }
-.conclusion-block p {
-    font-size: 2rem;
-    font-style: italic;
-    font-weight: 800;
-    font-family: 'Syne', sans-serif;
+.mechanic-card {
+    background-color: #fdfbf7;
+    border: 2px solid #d8d6dd;
+    padding: 25px; 
+    border-radius: 20px;
+    text-align: left;
+    transition: transform 0.3s;
+}
+
+.interactive-card {
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.interactive-card::after {
+    content: "▶";
+    position: absolute;
+    bottom: 20px;
+    right: 25px;
+    font-size: 1.8rem;
     color: #9c3d42;
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+    transform: translateY(10px) scale(0.8);
+}
+
+.mechanic-card:hover { 
+    transform: translateY(-5px); 
+    box-shadow: 0 10px 20px rgba(156,61,66,0.1); 
+    border-color: #9c3d42;
+}
+
+.interactive-card:hover::after {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.mechanic-card h3 { 
+    color: #9c3d42; 
+    font-family: 'Syne', sans-serif; 
+    font-size: 1.15rem; 
+    margin-bottom: 15px; 
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: none; 
+}
+
+.mechanic-card p { 
+    color: #4a3b3c; 
+    font-size: 1.1rem; 
+    line-height: 1.5; 
+}
+
+/* === MODAL DE VIDEO === */
+.video-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(26, 10, 11, 0.9); 
+    z-index: 2000; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none; 
+    transition: opacity 0.3s ease;
+}
+
+.video-modal.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-content {
+    width: 90%;
+    max-width: 800px;
+    background: #000;
+    border-radius: 15px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+
+.video-modal.active .modal-content {
+    transform: scale(1);
+}
+
+.modal-content video {
+    width: 100%;
+    display: block;
+}
+
+.close-modal {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    color: #fff;
+    font-size: 2rem;
+    font-family: sans-serif;
+    cursor: pointer;
+    z-index: 10;
+    line-height: 1;
+    text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+
+/* =========================================================================
+   === PIEZAS 3D EXPANDIDAS TALLER (Low-Poly + Stacking + Pilar) ===
+   ========================================================================= */
+.components-showcase {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+/* GALERÍA EN CUADRÍCULA (GRID-LAYOUT) */
+.components-showcase.grid-layout {
+    display: flex;
+    flex-direction: column; /* Apila las filas verticalmente */
+    gap: 40px; /* Espacio entre filas */
+    align-items: center; /* Centra las filas horizontalmente */
+}
+
+/* GRUPOS DE PIEZAS (FILAS DE GRID) */
+.components-group {
+    display: flex;
+    justify-content: center; /* Centra las piezas dentro de la fila */
+    gap: 60px; /* Espacio entre piezas de la misma fila */
+    flex-wrap: wrap; /* Permite wrap en pantallas muy pequeñas */
+    width: 100%;
+    max-width: 900px; /* Coherencia con ref-container */
+}
+
+.component-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+#screen-concepto .scene3d {
+    width: 140px;
+    height: 260px; 
+    perspective: 1000px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin-bottom: 10px;
+    user-select: none;
+    transition: transform 0.3s ease;
+}
+
+/* Todos los elementos 3D se agrandan al hacer hover (Interactivos o No) */
+.scene3d:hover {
+    transform: scale(1.1); 
+}
+
+.piece3d {
+    position: relative;
+    transform-style: preserve-3d;
+    animation: spin3d 8s linear infinite;
+}
+
+@keyframes spin3d {
+    0% { transform: rotateX(-20deg) rotateY(0deg); }
+    100% { transform: rotateX(-20deg) rotateY(360deg); }
+}
+
+/* --- ESTÁNDAR Y ESPECIAL --- */
+.piece-std, .piece-spc {
+    width: 60px;
+    height: 180px; 
+    --piece-color: #8C2041; 
+}
+.piece-spc { 
+    height: 220px; 
+    --piece-color: #A6DDE5; 
+}
+
+.face-std, .face-spc {
+    position: absolute;
+    width: 60px;
+    height: 180px;
+    background-color: var(--piece-color);
+    border: 1px solid rgba(0,0,0,0.1);
+    transition: background-color 0.3s;
+}
+
+.face-spc { top: 40px; }
+
+.face-std.front, .face-spc.front { transform: rotateY(0deg) translateZ(30px); filter: brightness(1); }
+.face-std.back, .face-spc.back { transform: rotateY(180deg) translateZ(30px); filter: brightness(0.8); }
+.face-std.left, .face-spc.left { transform: rotateY(-90deg) translateZ(30px); filter: brightness(0.9); }
+.face-std.right, .face-spc.right { transform: rotateY(90deg) translateZ(30px); filter: brightness(0.75); }
+.face-std.top { height: 60px; top: -30px; transform: rotateX(90deg) translateZ(0); filter: brightness(1.1); }
+.face-spc.top { height: 60px; top: 10px; transform: rotateX(90deg) translateZ(0); filter: brightness(1.1); }
+.face-std.bottom { height: 60px; top: calc(100% - 30px); transform: rotateX(-90deg) translateZ(0); filter: brightness(0.4); }
+.face-spc.bottom { height: 60px; top: calc(100% - 30px); transform: rotateX(-90deg) translateZ(0); filter: brightness(0.4); }
+
+.roof-face {
+    position: absolute;
+    width: 60px;
+    height: 50px; 
+    top: -10px; 
+    background-color: var(--piece-color);
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    transform-origin: bottom center;
+    transition: background-color 0.3s;
+}
+.roof-front { transform: rotateY(0deg) translateZ(30px) rotateX(36.87deg); filter: brightness(1.2); }
+.roof-right { transform: rotateY(90deg) translateZ(30px) rotateX(36.87deg); filter: brightness(1.1); }
+.roof-back { transform: rotateY(180deg) translateZ(30px) rotateX(36.87deg); filter: brightness(0.9); }
+.roof-left { transform: rotateY(-90deg) translateZ(30px) rotateX(36.87deg); filter: brightness(1); }
+
+
+/* --- PLATAFORMA HEXAGONAL Y BASE SOPORTE (INFRAESTRUCTURA 3D SÓLIDA) --- */
+.piece-hex { width: 140px; height: 140px; }
+.piece-base { width: 120px; height: 120px; }
+
+/* Caras Planas Principales */
+.face-hex {
+    position: absolute;
+    width: 140px;
+    height: 140px;
+    clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+    background-color: #FEFBF2;
+    background-image: repeating-conic-gradient(#F5BEBF 0% 25%, transparent 0% 50%);
+    background-size: 40px 20px; 
+}
+
+.face-circle {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background-color: #FEFBF2;
+}
+
+.hex-front, .circle-front { transform: translateZ(2px); filter: brightness(1); }
+.hex-back, .circle-back { transform: rotateY(180deg) translateZ(2px); filter: brightness(0.8); }
+
+/* --- TÉCNICA STACKING PARA ENCASTRES (Hexágonos Sólidos 3D) --- */
+.center-connector {
+    position: absolute;
+    width: 44px;
+    height: 44px;
+    top: 50%; left: 50%;
+    margin-top: -22px; margin-left: -22px;
+    transform-style: preserve-3d;
+}
+
+/* Elevación de la base del encastre a la altura final (6px) */
+.connector-front { transform: translateZ(6px); }
+.connector-back { transform: rotateY(180deg) translateZ(6px); }
+
+/* Las capas que rellenan el vacío (Paredes) hacia abajo (-1px a -4px) */
+.connector-layer {
+    position: absolute;
+    width: 100%; height: 100%;
+    background-color: #e5e3db;
+    clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+}
+
+.w0 { transform: translateZ(0px); background-color: #f1ebd8; } /* Superficie Tope */
+.w1 { transform: translateZ(-1px); background-color: #d1cfc7; } /* Pared Oscurecida */
+.w2 { transform: translateZ(-2px); background-color: #d1cfc7; }
+.w3 { transform: translateZ(-3px); background-color: #d1cfc7; }
+.w4 { transform: translateZ(-4px); background-color: #d1cfc7; } /* Toca la base a 2px */
+
+/* Agujero cuadrado rotado con profundidad simulada */
+.connector-hole {
+    position: absolute;
+    width: 16px; height: 16px;
+    top: 50%; left: 50%;
+    margin-top: -8px; margin-left: -8px;
+    transform: rotate(45deg) translateZ(0.5px); /* Ligeramente sobre la superficie (w0) */
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.5); /* Sombra interna para dar profundidad */
+}
+
+/* Colores dinámicos del hueco según pieza para asimilar la sombra interna del fondo */
+.hole-hex { background-color: #d696a0; } /* Rosa oscurecido */
+.hole-base { background-color: #dcd8c9; } /* Crema oscurecido */
+
+
+/* --- NUEVO PILAR CENTRAL DE MADERA (CORREGIDO: CLARO Y PEQUEÑO) --- */
+/* Dimensiones reducidas para no cubrir contenido */
+.piece-pillar {
+    width: 40px; /* Grosor reducido de 60px a 40px */
+    height: 200px; /* Altura reducida de 350px a 200px */
+    --wood-color: #FAF8ED; /* Madera clara, casi blanca pino taller */
+    --wood-grain: #E8D5B1; /* Veta muy tenue */
+}
+
+.face-pillar {
+    position: absolute;
+    width: 40px; /* Coherencia grosor */
+    height: 200px; /* Coherencia altura */
+    background-color: var(--wood-color);
+    border: 1px solid rgba(0,0,0,0.05); /* Borde más sutil */
+}
+
+/* Grano de madera low-poly solo en las cuatro caras verticales principales */
+.face-grain {
+    background-image: repeating-linear-gradient(to right, 
+        transparent 0% 12%, rgba(232, 213, 177, 0.4) 12% 14%, /* Veta más tenue */
+        transparent 14% 30%, rgba(232, 213, 177, 0.4) 30% 32%);
+}
+
+.face-pillar.front { transform: rotateY(0deg) translateZ(20px); filter: brightness(1); }
+.face-pillar.back { transform: rotateY(180deg) translateZ(20px); filter: brightness(0.9); }
+.face-pillar.left { transform: rotateY(-90deg) translateZ(20px); filter: brightness(0.95); }
+.face-pillar.right { transform: rotateY(90deg) translateZ(20px); filter: brightness(0.85); }
+
+/* Tapas superior/inferior lisas - Profundidad de 40px */
+.face-pillar.top { height: 40px; width: 40px; top: -20px; transform: rotateX(90deg) translateZ(0); filter: brightness(1.2); }
+.face-pillar.bottom { height: 40px; width: 40px; top: calc(100% - 20px); transform: rotateX(-90deg) translateZ(0); filter: brightness(0.6); }
+
+
+/* --- TEXTOS COMPONENTES --- */
+.component-item h4 { 
+    font-family: 'Syne', sans-serif; 
+    font-size: 1.2rem; 
+    color: #1a0a0b; 
+    margin-top: 10px;
+}
+.component-item p { 
+    font-size: 1rem; 
+    color: #5b5960; 
+    line-height: 1.4; 
+    text-align: center;
+}
+
+/* === TIPOGRAFÍA RESTAURADA DE CITA (Large scale Syne Bold) === */
+.conclusion-block { margin-top: 40px; text-align: center; }
+.conclusion-block p {
+    font-size: 3rem; /* Gran escala como el Dev Name */
+    font-weight: 700; /* Negrita Syne */
+    font-family: 'Syne', sans-serif; /* Syne font */
+    color: #9c3d42; /* Cita color */
     line-height: 1.2;
+    font-style: normal; /* Estilo normal, no cursiva */
 }
 
 /* === CRÉDITOS Y ESTELA CIAN === */
@@ -427,10 +767,7 @@ canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index
     letter-spacing: 2px;
 }
 
-/* Nuevos estilos para la sección de Docentes */
-.docentes-title {
-    margin-top: 50px; /* Separación del bloque de tu nombre */
-}
+.docentes-title { margin-top: 50px; }
 
 .teachers-names {
     font-size: 1.8rem;
@@ -442,7 +779,16 @@ canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index
 
 .ref-back-btn { margin: 0 auto 60px auto; display: block; }
 
-/* Animaciones de scroll */
+@media (max-width: 768px) {
+    .qr-row { flex-direction: column !important; text-align: center; gap: 40px; }
+    .qr-text { align-items: center !important; text-align: center !important; }
+    .tools-image-grid { gap: 30px; }
+    .tool-img-wrapper { width: 60px; height: 60px; }
+    .tool-label { opacity: 1; transform: translateY(0); font-size: 0.9rem;} 
+    /* Layout específico para móvil en el Grid corregido */
+    .components-group { flex-direction: column; gap: 40px; align-items: center; }
+}
+
 .scroll-anim {
     opacity: 0;
     transform: translateY(60px);

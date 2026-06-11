@@ -43,23 +43,21 @@ const breakTextIntoSpans = (element) => {
         element.appendChild(span);
     });
 }
-breakTextIntoSpans(gravitudTitle); 
+if(gravitudTitle) breakTextIntoSpans(gravitudTitle); 
 
-const letterSpans = gravitudTitle.querySelectorAll('span');
+const letterSpans = gravitudTitle?.querySelectorAll('span') || [];
 
 let isBlackoutMode = false; 
 let isFullyBlack = false;   
 let isReadyForFall = false; 
 let isFalling = false;      
 
-gravitudTitle.addEventListener('click', (e) => {
+gravitudTitle?.addEventListener('click', (e) => {
     if (isReadyForFall && !isFalling) {
         isFalling = true;
-        
         letterSpans.forEach(s => {
             s.classList.remove('letter-blackened', 'letter-shadowed', 'letter-fading');
         });
-        
         gravitudTitle.classList.add('title-fall');
         document.getElementById('subtitleContainer').classList.add('subtitle-visible');
         document.body.classList.add('scroll-allowed');
@@ -145,10 +143,9 @@ navLinks.forEach(link => {
             });
             
             const nextScreen = document.getElementById('screen-' + targetId);
-            nextScreen.style.display = nextScreen.id === 'screen-referencia' ? 'flex' : 'flex';
+            nextScreen.style.display = 'flex';
             
             void nextScreen.offsetHeight;
-            
             nextScreen.classList.add('animate-fall'); 
             
             transitionGlow.classList.remove('expanding');
@@ -156,7 +153,7 @@ navLinks.forEach(link => {
     });
 });
 
-// Volver a la pantalla principal
+// Volver a la pantalla principal reseteando los estados de animación
 document.querySelectorAll('.back-btn').forEach(btn => {
     btn.addEventListener('click', () => {
         transitionGlow.classList.add('expanding');
@@ -175,8 +172,9 @@ document.querySelectorAll('.back-btn').forEach(btn => {
         }, 1200);
 
         setTimeout(() => {
-            const refScreen = document.getElementById('screen-referencia');
-            if(refScreen) refScreen.scrollTop = 0;
+            document.querySelectorAll('.scrollable-screen').forEach(screen => {
+                screen.scrollTop = 0;
+            });
         }, 1000); 
     });
 });
@@ -190,24 +188,89 @@ sunHitArea.addEventListener('click', () => {
     intensity = sandboxSecret.classList.contains('sandbox-revealed') ? 2.0 : 1.0;
 });
 
-// --- ANIMACIÓN DE SCROLL EN LA SECCIÓN "LA REFERENCIA" ---
-const observerOptions = {
-    root: document.getElementById('screen-referencia'), 
-    rootMargin: '0px',
-    threshold: 0.15 
+// --- ANIMACIÓN DE SCROLL EN PANTALLAS COMPATIBLES ---
+const observeScrollableScreen = (screenId) => {
+    const screenElement = document.getElementById(screenId);
+    if (!screenElement) return;
+
+    const observerOptions = {
+        root: screenElement, 
+        rootMargin: '0px',
+        threshold: 0.15 
+    };
+
+    const scrollObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, observerOptions);
+
+    screenElement.querySelectorAll('.scroll-anim').forEach(el => {
+        scrollObserver.observe(el);
+    });
 };
 
-const scrollObserver = new IntersectionObserver((entries, observer) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
+observeScrollableScreen('screen-referencia');
+observeScrollableScreen('screen-concepto');
+
+// --- LÓGICA DEL MODAL DE VIDEO ---
+const videoModal = document.getElementById('videoModal');
+const modalVideo = document.getElementById('modalVideo');
+const closeModalBtn = document.getElementById('closeModal');
+const mechanicCards = document.querySelectorAll('.interactive-card');
+
+mechanicCards.forEach(card => {
+    card.addEventListener('click', () => {
+        const videoSrc = card.getAttribute('data-video');
+        if (videoSrc) {
+            modalVideo.src = videoSrc;
+            videoModal.classList.add('active');
+            modalVideo.play();
         }
     });
-}, observerOptions);
-
-document.querySelectorAll('.scroll-anim').forEach(el => {
-    scrollObserver.observe(el);
 });
+
+videoModal?.addEventListener('click', (e) => {
+    if (e.target === videoModal) {
+        closeVideo();
+    }
+});
+
+if(closeModalBtn) {
+    closeModalBtn.addEventListener('click', closeVideo);
+}
+
+function closeVideo() {
+    videoModal.classList.remove('active');
+    modalVideo.pause();
+    modalVideo.currentTime = 0; 
+}
+
+// --- INTERACCIÓN DE PIEZAS 3D TALLER (COLOR CHANGE BY CLICK) ---
+const paletaColores = [
+    '#8C2041', // Burdeos
+    '#FEFBF2', // Crema
+    '#A6DDE5', // Cian
+    '#F5BEBF'  // Rosa
+];
+
+const piezaEstandar = document.getElementById('piezaEstandar');
+const piezaEspecial = document.getElementById('piezaEspecial');
+
+function activarCambioColor(elemento) {
+    if (!elemento) return;
+    let currentColorIndex = elemento.id === 'piezaEspecial' ? 2 : 0; 
+
+    elemento.parentElement.addEventListener('click', () => {
+        currentColorIndex = (currentColorIndex + 1) % paletaColores.length;
+        elemento.style.setProperty('--piece-color', paletaColores[currentColorIndex]);
+    });
+}
+
+activarCambioColor(piezaEstandar);
+activarCambioColor(piezaEspecial);
 
 // --- EFECTO ESTELA CIAN EN EL NOMBRE DEL DESARROLLADOR ---
 const devNameLines = document.querySelectorAll('.dev-name-line');

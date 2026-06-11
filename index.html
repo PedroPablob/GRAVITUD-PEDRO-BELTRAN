@@ -52,17 +52,166 @@
         </div>
     </div>
 
-    <div class="screen new-section" id="screen-concepto">
-        <h1>EL CONCEPTO</h1>
-        <button class="back-btn">VOLVER AL INICIO</button>
+    <div class="screen new-section scrollable-screen" id="screen-concepto">
+        
+        <div class="ref-container" style="padding-bottom: 20px;">
+            <div class="ref-title">
+                <span>EL</span>
+                <span>CONCEPTO</span>
+            </div>
+        </div>
+
+        <div class="ref-block scroll-anim">
+            <h2>ZONA INESTABLE</h2>
+            <p>Zona Inestable es un juego de mesa que explora las leyes de la física a través de un sistema de estructuras modulares y piezas hexagonales suspendidas. El juego propone una experiencia de tensión constante donde cada jugador altera el centro de masa y la estabilidad del tablero a través del peso y el posicionamiento de los componentes.</p>
+        </div>
+
+        <div class="qr-showcase scroll-anim" style="padding: 40px; border-radius: 40px; margin-bottom: 0; display: flex; align-items: center; justify-content: center;">
+            <img src="juego de mesa.png" alt="Tablero Zona Inestable" style="width: 50%; display: block; margin: 0 auto; border-radius: 20px; box-shadow: 0 15px 35px rgba(156, 61, 66, 0.2);">
+        </div>
+
+        <div class="ref-container" style="padding-top: 40px;">
+            
+            <div class="ref-block scroll-anim">
+                <h2>MECÁNICAS FÍSICAS</h2>
+                <div class="mechanics-grid">
+                    <div class="mechanic-card interactive-card" data-video="video-estructura.mp4">
+                        <h3>LA ESTRUCTURA</h3>
+                        <p>Los jugadores construyen el tablero de manera modular, acoplando plataformas hexagonales. Esto genera un ecosistema suspendido frágil donde cada decisión altera el centro de masa.</p>
+                    </div>
+                    <div class="mechanic-card interactive-card" data-video="video-objetivo.mp4">
+                        <h3>EL OBJETIVO</h3>
+                        <p>Haciendo uso de una caña extendible, el jugador debe derribar la mayor cantidad de piezas rivales fuera de la estructura, evitando el colapso total y cuidando sus propias fichas.</p>
+                    </div>
+                    <div class="mechanic-card interactive-card" data-video="video-ruleta.mp4">
+                        <h3>LA RULETA</h3>
+                        <p>El azar dicta las condiciones motrices del turno. Una ruleta restringe la interacción obligando al jugador a utilizar "solo mano izquierda", "solo mano derecha" o "ambas manos".</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ref-block scroll-anim" style="margin-top: 40px;">
+                <h2>LOS COMPONENTES</h2>
+                
+                <div class="components-showcase grid-layout">
+                    
+                    <div class="components-group top-pieces">
+                        <div class="component-item">
+                            <div class="scene3d" title="Clic para cambiar color">
+                                <div class="piece3d piece-std" id="piezaEstandar">
+                                    <div class="face-std front"></div>
+                                    <div class="face-std back"></div>
+                                    <div class="face-std right"></div>
+                                    <div class="face-std left"></div>
+                                    <div class="face-std top"></div>
+                                    <div class="face-std bottom"></div>
+                                </div>
+                            </div>
+                            <h4>PIEZA ESTÁNDAR</h4>
+                            <p>Valor: 1 Punto<br>Cantidad: 8 por jugador</p>
+                        </div>
+
+                        <div class="component-item">
+                            <div class="scene3d" title="Clic para cambiar color">
+                                <div class="piece3d piece-spc" id="piezaEspecial">
+                                    <div class="face-spc front"></div>
+                                    <div class="face-spc back"></div>
+                                    <div class="face-spc right"></div>
+                                    <div class="face-spc left"></div>
+                                    <div class="face-spc top"></div>
+                                    <div class="face-spc bottom"></div>
+                                    <div class="roof-face roof-front"></div>
+                                    <div class="roof-face roof-back"></div>
+                                    <div class="roof-face roof-right"></div>
+                                    <div class="roof-face roof-left"></div>
+                                </div>
+                            </div>
+                            <h4>PIEZA ESPECIAL</h4>
+                            <p>Valor: 2 Puntos<br>Cantidad: 2 por jugador</p>
+                        </div>
+                    </div>
+
+                    <div class="components-group bottom-pieces">
+                        <div class="component-item platform-item">
+                            <div class="scene3d no-click">
+                                <div class="piece3d piece-hex">
+                                    <div class="face-hex hex-front"></div>
+                                    <div class="center-connector connector-front">
+                                        <div class="connector-layer w4"></div>
+                                        <div class="connector-layer w3"></div>
+                                        <div class="connector-layer w2"></div>
+                                        <div class="connector-layer w1"></div>
+                                        <div class="connector-layer w0"></div>
+                                        <div class="connector-hole hole-hex"></div>
+                                    </div>
+                                    <div class="face-hex hex-back"></div>
+                                    <div class="center-connector connector-back">
+                                        <div class="connector-layer w4"></div>
+                                        <div class="connector-layer w3"></div>
+                                        <div class="connector-layer w2"></div>
+                                        <div class="connector-layer w1"></div>
+                                        <div class="connector-layer w0"></div>
+                                        <div class="connector-hole hole-hex"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <h4>PLATAFORMA</h4>
+                            <p>Superficie modular de juego.</p>
+                        </div>
+
+                        <div class="component-item pillar-item">
+                            <div class="scene3d no-click">
+                                <div class="piece3d piece-pillar">
+                                    <div class="face-pillar face-grain front"></div>
+                                    <div class="face-pillar face-grain back"></div>
+                                    <div class="face-pillar face-grain left"></div>
+                                    <div class="face-pillar face-grain right"></div>
+                                    <div class="face-pillar top"></div>
+                                    <div class="face-pillar bottom"></div>
+                                </div>
+                            </div>
+                            <h4>PILAR CENTRAL</h4>
+                            <p>Vertical conector de madera de pino.</p>
+                        </div>
+
+                        <div class="component-item base-item">
+                            <div class="scene3d no-click">
+                                <div class="piece3d piece-base">
+                                    <div class="face-circle circle-front"></div>
+                                    <div class="center-connector connector-front">
+                                        <div class="connector-layer w4"></div>
+                                        <div class="connector-layer w3"></div>
+                                        <div class="connector-layer w2"></div>
+                                        <div class="connector-layer w1"></div>
+                                        <div class="connector-layer w0"></div>
+                                        <div class="connector-hole hole-base"></div>
+                                    </div>
+                                    <div class="face-circle circle-back"></div>
+                                </div>
+                            </div>
+                            <h4>BASE SOPORTE</h4>
+                            <p>Anclaje de estabilidad central.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="ref-block scroll-anim conclusion-block">
+                <h2>LA ABSTRACCIÓN DIGITAL</h2>
+                <p>"Esta interacción de fuerzas tangibles y mecánicas es el fundamento físico que da origen a la abstracción digital y sensorial de GRAVITUD."</p>
+            </div>
+
+            <button class="back-btn ref-back-btn">VOLVER AL INICIO</button>
+        </div>
     </div>
 
-    <div class="screen new-section" id="screen-experimental">
+    <div class="screen new-section scrollable-screen" id="screen-experimental">
         <h1>LO EXPERIMENTAL</h1>
         <button class="back-btn">VOLVER AL INICIO</button>
     </div>
 
-    <div class="screen new-section" id="screen-referencia">
+    <div class="screen new-section scrollable-screen" id="screen-referencia">
         
         <div class="ref-container" style="padding-bottom: 20px;">
             <div class="ref-title">
@@ -138,6 +287,13 @@
             </div>
 
             <button class="back-btn ref-back-btn">VOLVER AL INICIO</button>
+        </div>
+    </div>
+
+    <div class="video-modal" id="videoModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeModal">&times;</span>
+            <video id="modalVideo" controls></video>
         </div>
     </div>
 
